@@ -21,6 +21,9 @@ import { Mentions } from './entities/Mentions';
 import { Users } from './entities/Users';
 import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
+import { AuthModule } from './auth/auth.module';
+import { DMsModule } from './dms/dms.module';
+import { FrontendMiddleware } from './middlewares/frontend.middleware';
 
 @Module({
   imports: [
@@ -49,9 +52,11 @@ import { Workspaces } from './entities/Workspaces';
       synchronize: false,
       logging: true,
     }),
+    AuthModule,
     UsersModule,
     WorkspacesModule,
     ChannelsModule,
+    DMsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -59,5 +64,9 @@ import { Workspaces } from './entities/Workspaces';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(LoggerMiddleware).forRoutes('*');
+    // consumer.apply(FrontendMiddleware).forRoutes({
+    //   path: '/**',
+    //   method: RequestMethod.ALL,
+    // });
   }
 }
